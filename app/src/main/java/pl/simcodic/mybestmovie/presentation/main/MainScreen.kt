@@ -28,10 +28,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.compose.AppTheme
 import pl.simcodic.mybestmovie.R
 import pl.simcodic.mybestmovie.presentation.main.viewdata.NowPlayingMovieViewData
 import pl.simcodic.mybestmovie.presentation.main.viewdata.NowPlayingMoviesViewData
+import pl.simcodic.mybestmovie.presentation.theme.AppTheme
 
 
 @Composable
@@ -73,6 +73,7 @@ fun MoviesList(moviesData: List<NowPlayingMovieViewData>, modifier: Modifier = M
             .fillMaxSize()
     ) {
         items(moviesData.size) {
+            val movie = moviesData[it]
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -82,12 +83,16 @@ fun MoviesList(moviesData: List<NowPlayingMovieViewData>, modifier: Modifier = M
             ) {
                 Row {
                     AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w500${moviesData[it].posterPath}",
+                        model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
                         contentDescription = null,
                         modifier = Modifier.height(200.dp)
                     )
-                    Column {
-                        Text(text = moviesData[it].title)
+                    Column(modifier = Modifier.padding(5.dp)) {
+                        Text(text = "${movie.voteAverage} / ${movie.voteCount}")
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Text(text = movie.title, style = MaterialTheme.typography.titleMedium)
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Text(text = movie.releaseDate, style = MaterialTheme.typography.bodyMedium)
                     }
                 }
             }
