@@ -5,4 +5,6 @@ import pl.simcodic.mybestmovie.data.movie.data.NowPlayingMoviesResponseBody
 interface MovieRepository {
 
     fun getNowPlayingMovies(): NowPlayingMoviesResponseBody
+
+    fun findMovies(text: String): NowPlayingMoviesResponseBody
 }

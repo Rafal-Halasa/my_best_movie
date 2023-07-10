@@ -14,4 +14,15 @@ class MovieRepositoryImpl @Inject constructor(private val service: MovieService)
                 throw Exception("Not success response")
             }
         }
+
+    override fun findMovies(text: String): NowPlayingMoviesResponseBody =
+        with(service.findMovies(mapOf("query" to text)).execute()) {
+            if (this.isSuccessful) {
+                println(this.body())
+                println(text)
+                this.body() ?: throw Exception("Body is empty")
+            } else {
+                throw Exception("Not success response")
+            }
+        }
 }

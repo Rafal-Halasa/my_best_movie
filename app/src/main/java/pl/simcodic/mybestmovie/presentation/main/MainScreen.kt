@@ -51,8 +51,10 @@ import pl.simcodic.mybestmovie.presentation.theme.AppTheme
 fun MainScreen(viewModel: MainViewModel) {
     MainScreenContainer(
         viewModel.movies.collectAsState().value,
+        viewModel.findMovies.collectAsState().value,
         viewModel.isError.collectAsState().value,
-        viewModel::onDisableError
+        viewModel::onDisableError,
+        viewModel::onFindMovie
     )
 }
 
@@ -60,14 +62,19 @@ fun MainScreen(viewModel: MainViewModel) {
 @Composable
 fun MainScreenContainer(
     movies: NowPlayingMoviesViewData?,
+    findMovies: NowPlayingMoviesViewData?,
     isError: Boolean,
-    disableError: () -> Unit
+    disableError: () -> Unit,
+    onFindMovie: (String) -> Unit
 ) {
     var textField by rememberSaveable {
         mutableStateOf("")
     }
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
         SearchView(textField) {
+            if (it.length >= 3) {
+                onFindMovie(it)
+            }
             textField = it
         }
     }) { content ->
@@ -83,8 +90,8 @@ fun MainScreenContainer(
             if (movies != null) {
                 Box {
                     MoviesList(movies.movies)
-                    if (textField.length >= 3) {
-                        AutoFillView()
+                    findMovies?.movies?.let {
+                        AutoFillView(it)
                     }
                 }
             } else {
@@ -95,25 +102,26 @@ fun MainScreenContainer(
 }
 
 @Composable
-fun AutoFillView() {
-    Card(
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
-    ) {
-        LazyColumn(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
-                .fillMaxWidth()
+fun AutoFillView(movies: List<NowPlayingMovieViewData>) {
+    if (movies.isNotEmpty()) {
+        Card(
+            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
         ) {
-            items(listOf("test1", "test2")) {
-                Divider(
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                    thickness = 1.dp
-                )
-                Text(text = it, modifier = Modifier.padding(10.dp))
+            LazyColumn(
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.background)
+                    .fillMaxWidth()
+            ) {
+                items(movies) {
+                    Divider(
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                        thickness = 1.dp
+                    )
+                    Text(text = it.title, modifier = Modifier.padding(10.dp))
+                }
             }
         }
     }
-
 }
 
 
@@ -221,7 +229,16 @@ fun ErrorView(disableError: () -> Unit, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     AppTheme {
-        MainScreenContainer(NowPlayingMoviesViewData(1, listOf()), false) {}
+        MainScreenContainer(
+            NowPlayingMoviesViewData(
+                1,
+                listOf()
+            ),
+            NowPlayingMoviesViewData(
+                1,
+                listOf()
+            ), false, {}, {}
+        )
     }
 }
 
@@ -229,6 +246,14 @@ fun GreetingPreview() {
 @Composable
 fun GreetingPreviewError() {
     AppTheme {
-        MainScreenContainer(NowPlayingMoviesViewData(1, listOf()), true) {}
+        MainScreenContainer(
+            NowPlayingMoviesViewData(
+                1,
+                listOf()
+            ),
+            NowPlayingMoviesViewData(
+                1,
+                listOf()
+            ), true, {}, {})
     }
 }
