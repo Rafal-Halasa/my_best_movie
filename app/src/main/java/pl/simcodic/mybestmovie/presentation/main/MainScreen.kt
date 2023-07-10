@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -73,8 +74,7 @@ fun MoviesList(moviesData: List<NowPlayingMovieViewData>, modifier: Modifier = M
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 160.dp), modifier = modifier
     ) {
-        items(moviesData.size) {
-            val movie = moviesData[it]
+        items(moviesData) { movie ->
             Card(
                 modifier = Modifier
                     .height(250.dp)
@@ -99,6 +99,16 @@ fun MoviesList(moviesData: List<NowPlayingMovieViewData>, modifier: Modifier = M
                             contentDescription = null
                         )
                     }
+                }
+            }
+        }
+
+        item() {
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)) {
+                OutlinedButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(0.7f)) {
+                    Text(text = "More")
                 }
             }
         }
