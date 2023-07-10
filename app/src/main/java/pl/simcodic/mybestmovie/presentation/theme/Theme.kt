@@ -1,4 +1,4 @@
-package pl.simcodic.mybestmovie.ui.theme
+package pl.simcodic.mybestmovie.presentation.theme
 
 import android.app.Activity
 import android.os.Build

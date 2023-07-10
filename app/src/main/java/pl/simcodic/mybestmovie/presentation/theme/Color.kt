@@ -1,4 +1,4 @@
-package pl.simcodic.mybestmovie.ui.theme
+package pl.simcodic.mybestmovie.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
