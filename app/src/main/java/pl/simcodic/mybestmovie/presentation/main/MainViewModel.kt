@@ -47,13 +47,14 @@ class MainViewModel @Inject constructor(
     fun onFindMovie(text: String) {
         viewModelScope.launch {
             runCatching {
-
                 findMoviesUseCase(FindMoviesUseCaseInput(text))
             }.onSuccess { value ->
                 _findMovies.value = value.nowPlayingMovies.mapToNowPlayingMoviesViewData()
-            }.onFailure {
-                println("tutaj $it")
             }
         }
+    }
+
+    fun onFindMovieClear() {
+        _findMovies.value = null
     }
 }

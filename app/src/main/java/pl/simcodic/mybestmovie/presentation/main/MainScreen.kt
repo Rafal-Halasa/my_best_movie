@@ -54,7 +54,8 @@ fun MainScreen(viewModel: MainViewModel) {
         viewModel.findMovies.collectAsState().value,
         viewModel.isError.collectAsState().value,
         viewModel::onDisableError,
-        viewModel::onFindMovie
+        viewModel::onFindMovie,
+        viewModel::onFindMovieClear,
     )
 }
 
@@ -65,7 +66,8 @@ fun MainScreenContainer(
     findMovies: NowPlayingMoviesViewData?,
     isError: Boolean,
     disableError: () -> Unit,
-    onFindMovie: (String) -> Unit
+    onFindMovie: (String) -> Unit,
+    onFindMovieClear: () -> Unit
 ) {
     var textField by rememberSaveable {
         mutableStateOf("")
@@ -74,6 +76,8 @@ fun MainScreenContainer(
         SearchView(textField) {
             if (it.length >= 3) {
                 onFindMovie(it)
+            } else {
+                onFindMovieClear()
             }
             textField = it
         }
@@ -237,7 +241,7 @@ fun GreetingPreview() {
             NowPlayingMoviesViewData(
                 1,
                 listOf()
-            ), false, {}, {}
+            ), false, {}, {}, {}
         )
     }
 }
@@ -254,6 +258,6 @@ fun GreetingPreviewError() {
             NowPlayingMoviesViewData(
                 1,
                 listOf()
-            ), true, {}, {})
+            ), true, {}, {}, {})
     }
 }
