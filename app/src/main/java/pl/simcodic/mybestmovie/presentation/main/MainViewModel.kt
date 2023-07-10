@@ -28,14 +28,18 @@ class MainViewModel @Inject constructor(
                 getNowPlayingMoviesUseCase(NonInput)
             }.onSuccess { value ->
                 _movies.value = value.nowPlayingMovies.mapToNowPlayingMoviesViewData()
-                println("tutaj "+_movies.value)
+                println("tutaj " + _movies.value)
             }.onFailure {
                 _isError.value = true
             }
         }
     }
 
-    fun disableError() {
+    fun onDisableError() {
         _isError.value = false
+    }
+
+    fun onFindMovie(text: String) {
+
     }
 }

@@ -10,18 +10,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -49,7 +52,7 @@ fun MainScreen(viewModel: MainViewModel) {
     MainScreenContainer(
         viewModel.movies.collectAsState().value,
         viewModel.isError.collectAsState().value,
-        viewModel::disableError
+        viewModel::onDisableError
     )
 }
 
@@ -60,48 +63,84 @@ fun MainScreenContainer(
     isError: Boolean,
     disableError: () -> Unit
 ) {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-
-            var textField by rememberSaveable {
-                mutableStateOf("")
-            }
+    var textField by rememberSaveable {
+        mutableStateOf("")
+    }
+    Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
+        SearchView(textField) {
+            textField = it
+        }
+    }) { content ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(content),
+            contentAlignment = Alignment.Center
+        ) {
             if (isError) {
                 ErrorView(disableError)
             }
             if (movies != null) {
-                Column {
-                    TextField(
-                        value = textField,
-                        onValueChange = { textField = it },
-                        placeholder = { Text(text = "Find movie")},
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true,
-                        leadingIcon = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.baseline_search),
-                                contentDescription = null
-                            )
-                        },
-                        trailingIcon = {
-                            IconButton(onClick = { /*TODO*/ }) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.baseline_arrow_forward),
-                                    contentDescription = null
-                                )
-                            }
-                        }
-                    )
+                Box {
                     MoviesList(movies.movies)
+                    if (textField.length >= 3) {
+                        AutoFillView()
+                    }
                 }
             } else {
                 CircularProgressIndicator(modifier = Modifier.size(48.dp))
             }
         }
     }
+}
+
+@Composable
+fun AutoFillView() {
+    Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .fillMaxWidth()
+        ) {
+            items(listOf("test1", "test2")) {
+                Divider(
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                    thickness = 1.dp
+                )
+                Text(text = it, modifier = Modifier.padding(10.dp))
+            }
+        }
+    }
+
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchView(value: String, onValueChange: (String) -> Unit) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        placeholder = { Text(text = "Find movie") },
+        modifier = Modifier.fillMaxWidth(),
+        singleLine = true,
+        leadingIcon = {
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_search),
+                contentDescription = null
+            )
+        },
+        trailingIcon = {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_arrow_forward),
+                    contentDescription = null
+                )
+            }
+        }
+    )
 }
 
 @Composable
