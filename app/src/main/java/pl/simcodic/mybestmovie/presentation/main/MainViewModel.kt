@@ -21,4 +21,8 @@ class MainViewModel @Inject constructor(getNowPlayingMoviesUseCase: GetNowPlayin
             runCatching { getNowPlayingMoviesUseCase(NonInput) }.onFailure { _isError.value = true }
         }
     }
+
+    fun disableError() {
+        _isError.value = false
+    }
 }
