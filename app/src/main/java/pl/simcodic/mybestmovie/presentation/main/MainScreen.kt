@@ -3,11 +3,16 @@ package pl.simcodic.mybestmovie.presentation.main
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -21,34 +26,69 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.compose.AppTheme
 import pl.simcodic.mybestmovie.R
+import pl.simcodic.mybestmovie.presentation.main.viewdata.NowPlayingMovieViewData
+import pl.simcodic.mybestmovie.presentation.main.viewdata.NowPlayingMoviesViewData
 
 
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
-    MainScreenContainer(viewModel.isError.collectAsState().value, viewModel::disableError)
+    MainScreenContainer(
+        viewModel.movies.collectAsState().value,
+        viewModel.isError.collectAsState().value,
+        viewModel::disableError
+    )
 }
 
 @Composable
-fun MainScreenContainer(value: Boolean, disableError: () -> Unit) {
+fun MainScreenContainer(
+    movies: NowPlayingMoviesViewData?,
+    isError: Boolean,
+    disableError: () -> Unit
+) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        if (value) {
-            ErrorView(disableError)
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            if (isError) {
+                ErrorView(disableError)
+            }
+            if (movies != null) {
+                MoviesList(movies.movies)
+            } else {
+                CircularProgressIndicator(modifier = Modifier.size(48.dp))
+            }
         }
-        Greeting("Android")
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
+fun MoviesList(moviesData: List<NowPlayingMovieViewData>, modifier: Modifier = Modifier) {
+    LazyColumn(
         modifier = modifier
-    )
+            .fillMaxSize()
+    ) {
+        items(moviesData.size) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .padding(10.dp)
+            ) {
+                Row {
+                    AsyncImage(
+                        model = "https://image.tmdb.org/t/p/w500${moviesData[it].posterPath}",
+                        contentDescription = null,
+                        modifier = Modifier.height(200.dp)
+                    )
+                    Text(text = moviesData[it].title)
+                }
+            }
+        }
+    }
 }
 
 @Composable
@@ -81,7 +121,7 @@ fun ErrorView(disableError: () -> Unit, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     AppTheme {
-        MainScreenContainer(false, {})
+        MainScreenContainer(NowPlayingMoviesViewData(1, listOf()), false) {}
     }
 }
 
@@ -89,6 +129,6 @@ fun GreetingPreview() {
 @Composable
 fun GreetingPreviewError() {
     AppTheme {
-        MainScreenContainer(true, {})
+        MainScreenContainer(NowPlayingMoviesViewData(1, listOf()), true) {}
     }
 }
