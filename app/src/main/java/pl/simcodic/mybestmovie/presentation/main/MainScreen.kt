@@ -16,13 +16,20 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -46,6 +53,7 @@ fun MainScreen(viewModel: MainViewModel) {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreenContainer(
     movies: NowPlayingMoviesViewData?,
@@ -57,11 +65,38 @@ fun MainScreenContainer(
         color = MaterialTheme.colorScheme.background
     ) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+
+            var textField by rememberSaveable {
+                mutableStateOf("")
+            }
             if (isError) {
                 ErrorView(disableError)
             }
             if (movies != null) {
-                MoviesList(movies.movies)
+                Column {
+                    TextField(
+                        value = textField,
+                        onValueChange = { textField = it },
+                        placeholder = { Text(text = "Find movie")},
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_search),
+                                contentDescription = null
+                            )
+                        },
+                        trailingIcon = {
+                            IconButton(onClick = { /*TODO*/ }) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.baseline_arrow_forward),
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    )
+                    MoviesList(movies.movies)
+                }
             } else {
                 CircularProgressIndicator(modifier = Modifier.size(48.dp))
             }
@@ -104,9 +139,11 @@ fun MoviesList(moviesData: List<NowPlayingMovieViewData>, modifier: Modifier = M
         }
 
         item() {
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp)) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
+            ) {
                 OutlinedButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(0.7f)) {
                     Text(text = "More")
                 }
