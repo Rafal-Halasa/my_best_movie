@@ -11,7 +11,7 @@ import pl.simcodic.mybestmovie.presentation.theme.MyBestMovieTheme
 
 
 @Composable
-fun MainScreen() {
+fun MainScreen(viewModel: MainViewModel) {
     MyBestMovieTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
