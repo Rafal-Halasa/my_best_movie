@@ -1,3 +1,3 @@
 package pl.simcodic.mybestmovie.data.movie.data
 
-data class NowPlayingMoviesResponseBody(val page: Int, val result: List<MovieResponseBody>)
+data class NowPlayingMoviesResponseBody(val page: Int, val results: List<MovieResponseBody>)

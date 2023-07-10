@@ -18,7 +18,9 @@ class MainViewModel @Inject constructor(getNowPlayingMoviesUseCase: GetNowPlayin
 
     init {
         viewModelScope.launch {
-            runCatching { getNowPlayingMoviesUseCase(NonInput) }.onFailure { _isError.value = true }
+            runCatching { getNowPlayingMoviesUseCase(NonInput) }.onFailure {
+                _isError.value = true
+            }
         }
     }
 

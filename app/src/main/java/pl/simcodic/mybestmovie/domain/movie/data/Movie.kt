@@ -20,16 +20,16 @@ data class Movie(
 fun MovieResponseBody.mapToMovie() = with(this) {
     Movie(
         adult = adult,
-        backdropPath = backdropPath,
+        backdropPath = backdrop_path,
         id = id,
-        originalLanguage = originalLanguage,
-        originalTitle = originalTitle,
+        originalLanguage = original_language,
+        originalTitle = original_title,
         overview = overview,
         popularity = popularity,
-        posterPath = posterPath,
+        posterPath = poster_path,
         title = title,
         video = video,
-        voteAverage = voteAverage,
-        voteCount = voteCount
+        voteAverage = vote_average,
+        voteCount = vote_count
     )
 }
