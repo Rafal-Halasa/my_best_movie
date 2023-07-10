@@ -73,7 +73,7 @@ fun MainScreenContainer(
         mutableStateOf("")
     }
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
-        SearchView(textField) {
+        SearchView(textField, onFindMovieClear) {
             if (it.length >= 3) {
                 onFindMovie(it)
             } else {
@@ -131,7 +131,7 @@ fun AutoFillView(movies: List<NowPlayingMovieViewData>) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchView(value: String, onValueChange: (String) -> Unit) {
+fun SearchView(value: String, onFindMovieClear: () -> Unit, onValueChange: (String) -> Unit) {
     TextField(
         value = value,
         onValueChange = onValueChange,
@@ -145,11 +145,13 @@ fun SearchView(value: String, onValueChange: (String) -> Unit) {
             )
         },
         trailingIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.baseline_arrow_forward),
-                    contentDescription = null
-                )
+            if (value.length >= 3) {
+                IconButton(onClick = onFindMovieClear) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_close),
+                        contentDescription = null
+                    )
+                }
             }
         }
     )
