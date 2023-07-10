@@ -93,7 +93,7 @@ fun MainScreenContainer(
             }
             if (movies != null) {
                 Box {
-                    MoviesList(movies.movies)
+                    MoviesList(movies)
                     findMovies?.movies?.let {
                         AutoFillView(it)
                     }
@@ -158,11 +158,11 @@ fun SearchView(value: String, onFindMovieClear: () -> Unit, onValueChange: (Stri
 }
 
 @Composable
-fun MoviesList(moviesData: List<NowPlayingMovieViewData>, modifier: Modifier = Modifier) {
+fun MoviesList(moviesData: NowPlayingMoviesViewData, modifier: Modifier = Modifier) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 160.dp), modifier = modifier
     ) {
-        items(moviesData) { movie ->
+        items(moviesData.movies) { movie ->
             Card(
                 modifier = Modifier
                     .height(250.dp)
@@ -191,14 +191,16 @@ fun MoviesList(moviesData: List<NowPlayingMovieViewData>, modifier: Modifier = M
             }
         }
 
-        item() {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp)
-            ) {
-                OutlinedButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(0.7f)) {
-                    Text(text = "More")
+        item {
+            if (moviesData.page != moviesData.totalPages) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                ) {
+                    OutlinedButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(0.7f)) {
+                        Text(text = "More")
+                    }
                 }
             }
         }
@@ -238,11 +240,11 @@ fun GreetingPreview() {
         MainScreenContainer(
             NowPlayingMoviesViewData(
                 1,
-                listOf()
+                listOf(), 2
             ),
             NowPlayingMoviesViewData(
                 1,
-                listOf()
+                listOf(), 2
             ), false, {}, {}, {}
         )
     }
@@ -255,11 +257,11 @@ fun GreetingPreviewError() {
         MainScreenContainer(
             NowPlayingMoviesViewData(
                 1,
-                listOf()
+                listOf(), 2
             ),
             NowPlayingMoviesViewData(
                 1,
-                listOf()
+                listOf(), 2
             ), true, {}, {}, {})
     }
 }
