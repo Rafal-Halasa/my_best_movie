@@ -104,7 +104,7 @@ fun MainScreenContainer(
                         onDetailsGo = onDetailsGo
                     )
                     findMovies?.movies?.let {
-                        AutoFillView(movies = it)
+                        AutoFillView(onDetailsGo = onDetailsGo, movies = it)
                     }
                 }
             } else {
@@ -119,7 +119,7 @@ fun MainScreenContainer(
 }
 
 @Composable
-fun AutoFillView(movies: List<MovieViewData>) {
+fun AutoFillView(onDetailsGo: (MovieViewData) -> Unit, movies: List<MovieViewData>) {
     if (movies.isNotEmpty()) {
         Card(
             elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
@@ -134,7 +134,13 @@ fun AutoFillView(movies: List<MovieViewData>) {
                         color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
                         thickness = 1.dp
                     )
-                    Text(text = it.title, modifier = Modifier.padding(10.dp))
+
+                    Text(
+                        text = it.title,
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .fillMaxWidth()
+                            .clickable { onDetailsGo(it) })
                 }
             }
         }
