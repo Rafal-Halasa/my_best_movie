@@ -16,4 +16,4 @@ data class DetailsNavigationData(
 )
 
 fun DetailsNavigationData.toArgString() =
-    "$TITLE={$title}&$POSTER_PATH={$posterPath}&${RELEASE_DATA}={${releaseDate}}&${VOTE_AVERAGE}={${voteAverage}}&${VOTE_COUNT}={${voteCount}}"
+    "$TITLE=$title&$POSTER_PATH=$posterPath&$RELEASE_DATA=$releaseDate&$VOTE_AVERAGE=$voteAverage&$VOTE_COUNT=$voteCount"
