@@ -9,8 +9,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import pl.simcodic.mybestmovie.presentation.details.DetailsScreen
-import pl.simcodic.mybestmovie.presentation.main.Destinations.DETAILS
-import pl.simcodic.mybestmovie.presentation.main.Destinations.HOME
 import pl.simcodic.mybestmovie.presentation.theme.AppTheme
 
 @AndroidEntryPoint
@@ -23,15 +21,18 @@ class MainActivity : ComponentActivity() {
         setContent {
             AppTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = HOME.value) {
-                    composable(HOME.value) {
+                NavHost(
+                    navController = navController,
+                    startDestination = NavigationDirections.HOME.destination
+                ) {
+                    composable(NavigationDirections.HOME.destination) {
                         MainScreen(viewModel) {
-                            navController.navigate(DETAILS.value)
+                            navController.navigate(NavigationDirections.DETAILS.destination)
                         }
                     }
-                    composable(DETAILS.value) {
+                    composable(NavigationDirections.DETAILS.destination) {
                         DetailsScreen {
-                            navController.popBackStack(HOME.value, false)
+                            navController.popBackStack(NavigationDirections.HOME.destination, false)
                         }
                     }
                 }
@@ -40,6 +41,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-enum class Destinations(val value: String) {
+enum class NavigationDirections(val destination: String) {
     HOME("home"), DETAILS("details_screen")
 }
