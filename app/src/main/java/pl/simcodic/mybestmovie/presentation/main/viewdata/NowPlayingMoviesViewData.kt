@@ -15,3 +15,10 @@ fun NowPlayingMovies.mapToNowPlayingMoviesViewData() = with(this) {
         totalPages = totalPages
     )
 }
+
+operator fun NowPlayingMoviesViewData.plus(newMoviesViewData: NowPlayingMoviesViewData) =
+    NowPlayingMoviesViewData(
+        page = newMoviesViewData.page,
+        movies = this.movies + newMoviesViewData.movies,
+        totalPages = newMoviesViewData.totalPages
+    )

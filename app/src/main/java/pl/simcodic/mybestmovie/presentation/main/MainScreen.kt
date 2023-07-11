@@ -56,7 +56,7 @@ fun MainScreen(viewModel: MainViewModel) {
         viewModel::onDisableError,
         viewModel::onFindMovie,
         viewModel::onFindMovieClear,
-        viewModel::onGetNowPlayingMovies,
+        viewModel::onGetNowPlayingMovies2,
     )
 }
 

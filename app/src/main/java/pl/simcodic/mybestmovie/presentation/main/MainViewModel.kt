@@ -12,6 +12,7 @@ import pl.simcodic.mybestmovie.domain.movie.GetNowPlayingMoviesUseCase
 import pl.simcodic.mybestmovie.domain.movie.GetNowPlayingMoviesUseCase.NowPlayingMoviesInput
 import pl.simcodic.mybestmovie.presentation.main.viewdata.NowPlayingMoviesViewData
 import pl.simcodic.mybestmovie.presentation.main.viewdata.mapToNowPlayingMoviesViewData
+import pl.simcodic.mybestmovie.presentation.main.viewdata.plus
 import javax.inject.Inject
 
 @HiltViewModel
@@ -50,15 +51,26 @@ class MainViewModel @Inject constructor(
         _findMovies.value = null
     }
 
-    fun onGetNowPlayingMovies(page: Int) {
+    fun onGetNowPlayingMovies(
+        page: Int,
+        onSuccessAction: (value: GetNowPlayingMoviesUseCase.NowPlayingMoviesOutput) -> Unit = {
+            _movies.value = it.nowPlayingMovies.mapToNowPlayingMoviesViewData()
+        },
+    ) {
         viewModelScope.launch {
             runCatching {
                 getNowPlayingMoviesUseCase(NowPlayingMoviesInput(page))
-            }.onSuccess { value ->
-                _movies.value = value.nowPlayingMovies.mapToNowPlayingMoviesViewData()
-            }.onFailure {
-                println("tutaj $it")
+            }.onSuccess(onSuccessAction).onFailure {
                 _isError.value = true
+            }
+        }
+    }
+
+    fun onGetNowPlayingMovies2(page: Int) {
+        onGetNowPlayingMovies(page = page) { newPlayingMovies ->
+            _movies.value?.let {
+                _movies.value =
+                    it + newPlayingMovies.nowPlayingMovies.mapToNowPlayingMoviesViewData()
             }
         }
     }

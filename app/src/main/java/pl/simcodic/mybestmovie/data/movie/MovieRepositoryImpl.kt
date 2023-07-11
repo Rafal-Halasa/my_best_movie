@@ -11,7 +11,6 @@ class MovieRepositoryImpl @Inject constructor(private val service: MovieService)
             if (this.isSuccessful) {
                 this.body() ?: throw Exception("Body is empty")
             } else {
-                println("tutaj $this")
                 throw Exception("Not success response")
             }
         }
@@ -19,8 +18,6 @@ class MovieRepositoryImpl @Inject constructor(private val service: MovieService)
     override fun findMovies(text: String): NowPlayingMoviesResponseBody =
         with(service.findMovies(mapOf("query" to text)).execute()) {
             if (this.isSuccessful) {
-                println(this.body())
-                println(text)
                 this.body() ?: throw Exception("Body is empty")
             } else {
                 throw Exception("Not success response")
