@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import pl.simcodic.mybestmovie.R
@@ -30,6 +31,7 @@ import pl.simcodic.mybestmovie.presentation.main.ArgumentsNames.RELEASE_DATE
 import pl.simcodic.mybestmovie.presentation.main.ArgumentsNames.TITLE
 import pl.simcodic.mybestmovie.presentation.main.ArgumentsNames.VOTE_AVERAGE
 import pl.simcodic.mybestmovie.presentation.main.ArgumentsNames.VOTE_COUNT
+import pl.simcodic.mybestmovie.presentation.theme.AppTheme
 
 @Composable
 fun DetailsScreen(onBack: () -> Unit, arguments: Bundle?) {
@@ -118,5 +120,21 @@ fun DetailsScreenContainer(
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    AppTheme {
+        DetailsScreenContainer(
+            {},
+            "Me and my dog",
+            "/67ZsRKbItt6B1yHlsJKgfPWOyuJ.jpg",
+            "2023-04-27",
+            "6.5",
+            "367",
+            "When a headstrong street orphan, Seiya, in search of his abducted sister unwittingly taps into hidden powers, he discovers he might be the only person alive who can protect a reincarnated goddess, sent to watch over humanity. Can he let his past go and embrace his destiny to become a Knight of the Zodiac?"
+        )
     }
 }
