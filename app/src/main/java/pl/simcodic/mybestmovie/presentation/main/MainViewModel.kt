@@ -6,10 +6,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import pl.simcodic.mybestmovie.domain.base.NonInput
 import pl.simcodic.mybestmovie.domain.movie.FindMoviesUseCase
 import pl.simcodic.mybestmovie.domain.movie.FindMoviesUseCase.FindMoviesUseCaseInput
 import pl.simcodic.mybestmovie.domain.movie.GetNowPlayingMoviesUseCase
+import pl.simcodic.mybestmovie.domain.movie.GetNowPlayingMoviesUseCase.NowPlayingMoviesInput
 import pl.simcodic.mybestmovie.presentation.main.viewdata.NowPlayingMoviesViewData
 import pl.simcodic.mybestmovie.presentation.main.viewdata.mapToNowPlayingMoviesViewData
 import javax.inject.Inject
@@ -29,15 +29,7 @@ class MainViewModel @Inject constructor(
     val findMovies = _findMovies.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            runCatching {
-                getNowPlayingMoviesUseCase(NonInput)
-            }.onSuccess { value ->
-                _movies.value = value.nowPlayingMovies.mapToNowPlayingMoviesViewData()
-            }.onFailure {
-                _isError.value = true
-            }
-        }
+        onGetNowPlayingMovies(1)
     }
 
     fun onDisableError() {
@@ -56,5 +48,18 @@ class MainViewModel @Inject constructor(
 
     fun onFindMovieClear() {
         _findMovies.value = null
+    }
+
+    fun onGetNowPlayingMovies(page: Int) {
+        viewModelScope.launch {
+            runCatching {
+                getNowPlayingMoviesUseCase(NowPlayingMoviesInput(page))
+            }.onSuccess { value ->
+                _movies.value = value.nowPlayingMovies.mapToNowPlayingMoviesViewData()
+            }.onFailure {
+                println("tutaj $it")
+                _isError.value = true
+            }
+        }
     }
 }

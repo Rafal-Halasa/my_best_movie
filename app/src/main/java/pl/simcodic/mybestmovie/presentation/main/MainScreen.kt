@@ -56,6 +56,7 @@ fun MainScreen(viewModel: MainViewModel) {
         viewModel::onDisableError,
         viewModel::onFindMovie,
         viewModel::onFindMovieClear,
+        viewModel::onGetNowPlayingMovies,
     )
 }
 
@@ -67,7 +68,8 @@ fun MainScreenContainer(
     isError: Boolean,
     disableError: () -> Unit,
     onFindMovie: (String) -> Unit,
-    onFindMovieClear: () -> Unit
+    onFindMovieClear: () -> Unit,
+    onGetNowPlayingMovies: (Int) -> Unit,
 ) {
     var textField by rememberSaveable {
         mutableStateOf("")
@@ -88,18 +90,19 @@ fun MainScreenContainer(
                 .padding(content),
             contentAlignment = Alignment.Center
         ) {
-            if (isError) {
-                ErrorView(disableError)
-            }
             if (movies != null) {
                 Box {
-                    MoviesList(movies)
+                    MoviesList(onGetNowPlayingMovies = onGetNowPlayingMovies, moviesData = movies)
                     findMovies?.movies?.let {
-                        AutoFillView(it)
+                        AutoFillView(movies = it)
                     }
                 }
             } else {
                 CircularProgressIndicator(modifier = Modifier.size(48.dp))
+            }
+
+            if (isError) {
+                ErrorView(disableError)
             }
         }
     }
@@ -158,7 +161,11 @@ fun SearchView(value: String, onFindMovieClear: () -> Unit, onValueChange: (Stri
 }
 
 @Composable
-fun MoviesList(moviesData: NowPlayingMoviesViewData, modifier: Modifier = Modifier) {
+fun MoviesList(
+    onGetNowPlayingMovies: (Int) -> Unit,
+    moviesData: NowPlayingMoviesViewData,
+    modifier: Modifier = Modifier
+) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 160.dp), modifier = modifier
     ) {
@@ -198,7 +205,10 @@ fun MoviesList(moviesData: NowPlayingMoviesViewData, modifier: Modifier = Modifi
                         .fillMaxWidth()
                         .padding(10.dp)
                 ) {
-                    OutlinedButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(0.7f)) {
+                    OutlinedButton(
+                        onClick = { onGetNowPlayingMovies(moviesData.page + 1) },
+                        modifier = Modifier.fillMaxWidth(0.7f)
+                    ) {
                         Text(text = "More")
                     }
                 }
@@ -245,7 +255,7 @@ fun GreetingPreview() {
             NowPlayingMoviesViewData(
                 1,
                 listOf(), 2
-            ), false, {}, {}, {}
+            ), false, {}, {}, {}, {}
         )
     }
 }
@@ -262,6 +272,6 @@ fun GreetingPreviewError() {
             NowPlayingMoviesViewData(
                 1,
                 listOf(), 2
-            ), true, {}, {}, {})
+            ), true, {}, {}, {}, {})
     }
 }

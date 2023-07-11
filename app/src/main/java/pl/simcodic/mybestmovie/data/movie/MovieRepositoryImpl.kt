@@ -6,11 +6,12 @@ import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(private val service: MovieService) : MovieRepository {
 
-    override fun getNowPlayingMovies(): NowPlayingMoviesResponseBody =
-        with(service.getNowPlayingMovies().execute()) {
+    override fun getNowPlayingMovies(page: Int): NowPlayingMoviesResponseBody =
+        with(service.getNowPlayingMovies(mapOf("page" to page)).execute()) {
             if (this.isSuccessful) {
                 this.body() ?: throw Exception("Body is empty")
             } else {
+                println("tutaj $this")
                 throw Exception("Not success response")
             }
         }
