@@ -8,7 +8,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import pl.simcodic.mybestmovie.presentation.main.Destinations.*
+import pl.simcodic.mybestmovie.presentation.details.DetailsScreen
+import pl.simcodic.mybestmovie.presentation.main.Destinations.DETAILS
+import pl.simcodic.mybestmovie.presentation.main.Destinations.HOME
 import pl.simcodic.mybestmovie.presentation.theme.AppTheme
 
 @AndroidEntryPoint
@@ -23,10 +25,14 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = HOME.value) {
                     composable(HOME.value) {
-                        MainScreen(viewModel)
+                        MainScreen(viewModel) {
+                            navController.navigate(DETAILS.value)
+                        }
                     }
-                    composable(DETAILS.value){
-                        MainScreen(viewModel)
+                    composable(DETAILS.value) {
+                        DetailsScreen {
+                            navController.popBackStack(HOME.value, false)
+                        }
                     }
                 }
             }

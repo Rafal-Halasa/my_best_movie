@@ -2,6 +2,7 @@ package pl.simcodic.mybestmovie.presentation.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -48,7 +49,7 @@ import pl.simcodic.mybestmovie.presentation.theme.AppTheme
 
 
 @Composable
-fun MainScreen(viewModel: MainViewModel) {
+fun MainScreen(viewModel: MainViewModel, onDetailsGo: () -> Unit) {
     MainScreenContainer(
         viewModel.movies.collectAsState().value,
         viewModel.findMovies.collectAsState().value,
@@ -57,6 +58,7 @@ fun MainScreen(viewModel: MainViewModel) {
         viewModel::onFindMovie,
         viewModel::onFindMovieClear,
         viewModel::onGetNowPlayingMoviesWithPagination,
+        onDetailsGo,
     )
 }
 
@@ -70,6 +72,7 @@ fun MainScreenContainer(
     onFindMovie: (String) -> Unit,
     onFindMovieClear: () -> Unit,
     onGetNowPlayingMoviesWithPagination: (Int) -> Unit,
+    onDetailsGo: () -> Unit,
 ) {
     var textField by rememberSaveable {
         mutableStateOf("")
@@ -92,7 +95,11 @@ fun MainScreenContainer(
         ) {
             if (movies != null) {
                 Box {
-                    MoviesList(onGetNowPlayingMovies = onGetNowPlayingMoviesWithPagination, moviesData = movies)
+                    MoviesList(
+                        onGetNowPlayingMovies = onGetNowPlayingMoviesWithPagination,
+                        moviesData = movies,
+                        onDetailsGo = onDetailsGo
+                    )
                     findMovies?.movies?.let {
                         AutoFillView(movies = it)
                     }
@@ -163,6 +170,7 @@ fun SearchView(value: String, onFindMovieClear: () -> Unit, onValueChange: (Stri
 @Composable
 fun MoviesList(
     onGetNowPlayingMovies: (Int) -> Unit,
+    onDetailsGo: () -> Unit,
     moviesData: NowPlayingMoviesViewData,
     modifier: Modifier = Modifier
 ) {
@@ -176,7 +184,7 @@ fun MoviesList(
                     .padding(10.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
             ) {
-                Box {
+                Box(modifier = Modifier.clickable(onClick = onDetailsGo)) {
                     AsyncImage(
                         model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
                         contentDescription = null,
@@ -255,7 +263,7 @@ fun GreetingPreview() {
             NowPlayingMoviesViewData(
                 1,
                 listOf(), 2
-            ), false, {}, {}, {}, {}
+            ), false, {}, {}, {}, {}, {}
         )
     }
 }
@@ -272,6 +280,7 @@ fun GreetingPreviewError() {
             NowPlayingMoviesViewData(
                 1,
                 listOf(), 2
-            ), true, {}, {}, {}, {})
+            ), true, {}, {}, {}, {}, {}
+        )
     }
 }
