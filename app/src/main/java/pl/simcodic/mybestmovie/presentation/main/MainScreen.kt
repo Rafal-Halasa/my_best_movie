@@ -49,7 +49,7 @@ import pl.simcodic.mybestmovie.presentation.theme.AppTheme
 
 
 @Composable
-fun MainScreen(viewModel: MainViewModel, onDetailsGo: () -> Unit) {
+fun MainScreen(onDetailsGo: (NowPlayingMovieViewData) -> Unit, viewModel: MainViewModel) {
     MainScreenContainer(
         viewModel.movies.collectAsState().value,
         viewModel.findMovies.collectAsState().value,
@@ -72,7 +72,7 @@ fun MainScreenContainer(
     onFindMovie: (String) -> Unit,
     onFindMovieClear: () -> Unit,
     onGetNowPlayingMoviesWithPagination: (Int) -> Unit,
-    onDetailsGo: () -> Unit,
+    onDetailsGo: (NowPlayingMovieViewData) -> Unit,
 ) {
     var textField by rememberSaveable {
         mutableStateOf("")
@@ -170,7 +170,7 @@ fun SearchView(value: String, onFindMovieClear: () -> Unit, onValueChange: (Stri
 @Composable
 fun MoviesList(
     onGetNowPlayingMovies: (Int) -> Unit,
-    onDetailsGo: () -> Unit,
+    onDetailsGo: (NowPlayingMovieViewData) -> Unit,
     moviesData: NowPlayingMoviesViewData,
     modifier: Modifier = Modifier
 ) {
@@ -184,7 +184,7 @@ fun MoviesList(
                     .padding(10.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
             ) {
-                Box(modifier = Modifier.clickable(onClick = onDetailsGo)) {
+                Box(modifier = Modifier.clickable(onClick = { onDetailsGo(movie) })) {
                     AsyncImage(
                         model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
                         contentDescription = null,
