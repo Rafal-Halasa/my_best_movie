@@ -6,13 +6,17 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import pl.simcodic.mybestmovie.domain.base.NonInput
+import pl.simcodic.mybestmovie.domain.movie.local.GetLocalMoviesUseCase
 import pl.simcodic.mybestmovie.domain.movie.local.SaveLocalMovieUseCase
-import pl.simcodic.mybestmovie.domain.movie.local.data.MovieLocal
+import pl.simcodic.mybestmovie.domain.movie.local.data.LocalMovie
 import pl.simcodic.mybestmovie.domain.movie.remote.FindMoviesUseCase
 import pl.simcodic.mybestmovie.domain.movie.remote.FindMoviesUseCase.FindMoviesUseCaseInput
 import pl.simcodic.mybestmovie.domain.movie.remote.GetNowPlayingMoviesUseCase
 import pl.simcodic.mybestmovie.domain.movie.remote.GetNowPlayingMoviesUseCase.NowPlayingMoviesInput
+import pl.simcodic.mybestmovie.presentation.main.viewdata.LocalMovieViewData
 import pl.simcodic.mybestmovie.presentation.main.viewdata.MoviesViewData
+import pl.simcodic.mybestmovie.presentation.main.viewdata.mapToLocalMovieViewData
 import pl.simcodic.mybestmovie.presentation.main.viewdata.mapToMoviesViewData
 import pl.simcodic.mybestmovie.presentation.main.viewdata.plus
 import javax.inject.Inject
@@ -22,6 +26,7 @@ class MainViewModel @Inject constructor(
     private val getNowPlayingMoviesUseCase: GetNowPlayingMoviesUseCase,
     private val findMoviesUseCase: FindMoviesUseCase,
     private val saveLocalMovieUseCase: SaveLocalMovieUseCase,
+    private val getLocalMoviesUseCase: GetLocalMoviesUseCase,
 ) : ViewModel() {
     private var _isError = MutableStateFlow(false)
     val isError = _isError.asStateFlow()
@@ -32,8 +37,22 @@ class MainViewModel @Inject constructor(
     private var _findMovies = MutableStateFlow<MoviesViewData?>(null)
     val findMovies = _findMovies.asStateFlow()
 
+    private var _localMovies = MutableStateFlow<List<LocalMovieViewData>>(emptyList())
+    val localMovies = _localMovies.asStateFlow()
+
     init {
         onGetNowPlayingMovies(1)
+        viewModelScope.launch {
+            runCatching {
+                println("tutaj tak")
+                getLocalMoviesUseCase(NonInput)
+            }.onSuccess { output ->
+                println("tutaj " +output.localMovie)
+                _localMovies.value = output.localMovie.map { it.mapToLocalMovieViewData() }
+            }.onFailure {
+                println("tutaj cos poszlo nie tal $it")
+            }
+        }
     }
 
     fun onDisableError() {
@@ -65,7 +84,7 @@ class MainViewModel @Inject constructor(
 
     fun onAddMovieToFavorite(id: Int) {
         viewModelScope.launch {
-            saveLocalMovieUseCase(SaveLocalMovieUseCase.SaveLocalInput(MovieLocal(id, true)))
+            saveLocalMovieUseCase(SaveLocalMovieUseCase.SaveLocalInput(LocalMovie(id, true)))
         }
     }
 

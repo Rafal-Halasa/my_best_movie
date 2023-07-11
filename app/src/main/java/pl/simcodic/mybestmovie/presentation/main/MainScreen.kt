@@ -43,6 +43,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import pl.simcodic.mybestmovie.R
+import pl.simcodic.mybestmovie.presentation.main.viewdata.LocalMovieViewData
 import pl.simcodic.mybestmovie.presentation.main.viewdata.MovieViewData
 import pl.simcodic.mybestmovie.presentation.main.viewdata.MoviesViewData
 import pl.simcodic.mybestmovie.presentation.theme.AppTheme
@@ -53,6 +54,7 @@ fun MainScreen(onDetailsGo: (MovieViewData) -> Unit, viewModel: MainViewModel) {
     MainScreenContainer(
         viewModel.movies.collectAsState().value,
         viewModel.findMovies.collectAsState().value,
+        viewModel.localMovies.collectAsState().value,
         viewModel.isError.collectAsState().value,
         viewModel::onDisableError,
         viewModel::onFindMovie,
@@ -68,6 +70,7 @@ fun MainScreen(onDetailsGo: (MovieViewData) -> Unit, viewModel: MainViewModel) {
 fun MainScreenContainer(
     movies: MoviesViewData?,
     findMovies: MoviesViewData?,
+    localMovie: List<LocalMovieViewData>,
     isError: Boolean,
     disableError: () -> Unit,
     onFindMovie: (String) -> Unit,
@@ -101,7 +104,8 @@ fun MainScreenContainer(
                         onGetNowPlayingMovies = onGetNowPlayingMoviesWithPagination,
                         onAddMovieToFavorite = onAddMovieToFavorite,
                         moviesData = movies,
-                        onDetailsGo = onDetailsGo
+                        onDetailsGo = onDetailsGo,
+                        localMovie = localMovie
                     )
                     findMovies?.movies?.let {
                         AutoFillView(onDetailsGo = onDetailsGo, movies = it)
@@ -182,7 +186,8 @@ fun MoviesList(
     onDetailsGo: (MovieViewData) -> Unit,
     onAddMovieToFavorite: (Int) -> Unit,
     moviesData: MoviesViewData,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    localMovie: List<LocalMovieViewData>
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 160.dp), modifier = modifier
@@ -207,11 +212,18 @@ fun MoviesList(
                             .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)),
                         contentAlignment = Alignment.TopEnd
                     ) {
-                        IconButton(onClick = { onAddMovieToFavorite(1) }) {
-                            Image(
-                                painter = painterResource(id = R.drawable.baseline_star_border),
-                                contentDescription = null
-                            )
+                        IconButton(onClick = { onAddMovieToFavorite(movie.id) }) {
+                            if (localMovie.find { it.id == movie.id } != null) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.baseline_star),
+                                    contentDescription = null
+                                )
+                            } else {
+                                Image(
+                                    painter = painterResource(id = R.drawable.baseline_star_border),
+                                    contentDescription = null
+                                )
+                            }
                         }
                     }
                 }
@@ -275,7 +287,7 @@ fun GreetingPreview() {
             MoviesViewData(
                 1,
                 listOf(), 2
-            ), false, {}, {}, {}, {}, {}, {}
+            ), listOf(), false, {}, {}, {}, {}, {}, {}
         )
     }
 }
@@ -292,7 +304,7 @@ fun GreetingPreviewError() {
             MoviesViewData(
                 1,
                 listOf(), 2
-            ), true, {}, {}, {}, {}, {}, {}
+            ), listOf(), true, {}, {}, {}, {}, {}, {}
         )
     }
 }
