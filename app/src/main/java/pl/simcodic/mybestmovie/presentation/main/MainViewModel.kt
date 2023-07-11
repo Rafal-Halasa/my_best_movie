@@ -78,9 +78,10 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun onAddMovieToFavorite(id: Int) {
+    fun onAddMovieToFavorite(id: Int, isLike: Boolean) {
         viewModelScope.launch {
-            saveLocalMovieUseCase(SaveLocalMovieUseCase.SaveLocalInput(LocalMovie(id, true)))
+            println("tutaj $isLike")
+            saveLocalMovieUseCase(SaveLocalMovieUseCase.SaveLocalInput(LocalMovie(id, !isLike)))
         }
     }
 

@@ -76,7 +76,7 @@ fun MainScreenContainer(
     onFindMovie: (String) -> Unit,
     onFindMovieClear: () -> Unit,
     onGetNowPlayingMoviesWithPagination: (Int) -> Unit,
-    onAddMovieToFavorite: (Int) -> Unit,
+    onAddMovieToFavorite: (Int, Boolean) -> Unit,
     onDetailsGo: (MovieViewData) -> Unit,
 ) {
     var textField by rememberSaveable {
@@ -184,7 +184,7 @@ fun SearchView(value: String, onFindMovieClear: () -> Unit, onValueChange: (Stri
 fun MoviesList(
     onGetNowPlayingMovies: (Int) -> Unit,
     onDetailsGo: (MovieViewData) -> Unit,
-    onAddMovieToFavorite: (Int) -> Unit,
+    onAddMovieToFavorite: (Int, Boolean) -> Unit,
     moviesData: MoviesViewData,
     modifier: Modifier = Modifier,
     localMovie: List<LocalMovieViewData>
@@ -212,8 +212,14 @@ fun MoviesList(
                             .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)),
                         contentAlignment = Alignment.TopEnd
                     ) {
-                        IconButton(onClick = { onAddMovieToFavorite(movie.id) }) {
-                            if (localMovie.find { it.id == movie.id } != null) {
+                        val findMovie = localMovie.find { it.id == movie.id }
+                        IconButton(onClick = {
+                            onAddMovieToFavorite(
+                                movie.id,
+                                findMovie?.isLike ?: false
+                            )
+                        }) {
+                            if (findMovie != null && findMovie.isLike) {
                                 Image(
                                     painter = painterResource(id = R.drawable.baseline_star),
                                     contentDescription = null
@@ -287,7 +293,7 @@ fun GreetingPreview() {
             MoviesViewData(
                 1,
                 listOf(), 2
-            ), listOf(), false, {}, {}, {}, {}, {}, {}
+            ), listOf(), false, {}, {}, {}, {}, { _, _ -> }, {}
         )
     }
 }
@@ -304,7 +310,7 @@ fun GreetingPreviewError() {
             MoviesViewData(
                 1,
                 listOf(), 2
-            ), listOf(), true, {}, {}, {}, {}, {}, {}
+            ), listOf(), true, {}, {}, {}, {}, { _, _ -> }, {}
         )
     }
 }
