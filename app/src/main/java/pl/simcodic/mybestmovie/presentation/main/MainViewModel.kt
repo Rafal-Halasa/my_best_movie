@@ -51,7 +51,16 @@ class MainViewModel @Inject constructor(
         _findMovies.value = null
     }
 
-    fun onGetNowPlayingMovies(
+    fun onGetNowPlayingMoviesWithPagination(page: Int) {
+        onGetNowPlayingMovies(page = page) { newPlayingMovies ->
+            _movies.value?.let {
+                _movies.value =
+                    it + newPlayingMovies.nowPlayingMovies.mapToNowPlayingMoviesViewData()
+            }
+        }
+    }
+
+    private fun onGetNowPlayingMovies(
         page: Int,
         onSuccessAction: (value: GetNowPlayingMoviesUseCase.NowPlayingMoviesOutput) -> Unit = {
             _movies.value = it.nowPlayingMovies.mapToNowPlayingMoviesViewData()
@@ -62,15 +71,6 @@ class MainViewModel @Inject constructor(
                 getNowPlayingMoviesUseCase(NowPlayingMoviesInput(page))
             }.onSuccess(onSuccessAction).onFailure {
                 _isError.value = true
-            }
-        }
-    }
-
-    fun onGetNowPlayingMovies2(page: Int) {
-        onGetNowPlayingMovies(page = page) { newPlayingMovies ->
-            _movies.value?.let {
-                _movies.value =
-                    it + newPlayingMovies.nowPlayingMovies.mapToNowPlayingMoviesViewData()
             }
         }
     }

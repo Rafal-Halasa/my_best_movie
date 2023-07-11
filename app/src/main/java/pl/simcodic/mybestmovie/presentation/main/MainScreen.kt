@@ -56,7 +56,7 @@ fun MainScreen(viewModel: MainViewModel) {
         viewModel::onDisableError,
         viewModel::onFindMovie,
         viewModel::onFindMovieClear,
-        viewModel::onGetNowPlayingMovies2,
+        viewModel::onGetNowPlayingMoviesWithPagination,
     )
 }
 
@@ -69,7 +69,7 @@ fun MainScreenContainer(
     disableError: () -> Unit,
     onFindMovie: (String) -> Unit,
     onFindMovieClear: () -> Unit,
-    onGetNowPlayingMovies: (Int) -> Unit,
+    onGetNowPlayingMoviesWithPagination: (Int) -> Unit,
 ) {
     var textField by rememberSaveable {
         mutableStateOf("")
@@ -92,7 +92,7 @@ fun MainScreenContainer(
         ) {
             if (movies != null) {
                 Box {
-                    MoviesList(onGetNowPlayingMovies = onGetNowPlayingMovies, moviesData = movies)
+                    MoviesList(onGetNowPlayingMovies = onGetNowPlayingMoviesWithPagination, moviesData = movies)
                     findMovies?.movies?.let {
                         AutoFillView(movies = it)
                     }
