@@ -1,4 +1,4 @@
-package pl.simcodic.mybestmovie.data.movie.data
+package pl.simcodic.mybestmovie.data.movie.remote.data
 
 
 data class NowPlayingMoviesResponseBody(

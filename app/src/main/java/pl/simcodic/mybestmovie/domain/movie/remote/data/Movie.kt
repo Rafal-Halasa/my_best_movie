@@ -1,6 +1,6 @@
-package pl.simcodic.mybestmovie.domain.movie.data
+package pl.simcodic.mybestmovie.domain.movie.remote.data
 
-import pl.simcodic.mybestmovie.data.movie.data.MovieResponseBody
+import pl.simcodic.mybestmovie.data.movie.remote.data.MovieResponseBody
 
 data class Movie(
     val adult: Boolean,

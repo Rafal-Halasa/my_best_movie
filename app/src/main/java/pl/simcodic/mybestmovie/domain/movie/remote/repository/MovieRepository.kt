@@ -1,6 +1,6 @@
-package pl.simcodic.mybestmovie.domain.movie.repository
+package pl.simcodic.mybestmovie.domain.movie.remote.repository
 
-import pl.simcodic.mybestmovie.data.movie.data.NowPlayingMoviesResponseBody
+import pl.simcodic.mybestmovie.data.movie.remote.data.NowPlayingMoviesResponseBody
 
 interface MovieRepository {
 

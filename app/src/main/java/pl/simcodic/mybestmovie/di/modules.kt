@@ -1,16 +1,22 @@
 package pl.simcodic.mybestmovie.di
 
+import android.content.Context
+import androidx.room.Room
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import pl.simcodic.mybestmovie.BuildConfig
-import pl.simcodic.mybestmovie.data.movie.MovieRepositoryImpl
-import pl.simcodic.mybestmovie.data.movie.MovieService
-import pl.simcodic.mybestmovie.domain.movie.repository.MovieRepository
+import pl.simcodic.mybestmovie.data.database.MovieDatabase
+import pl.simcodic.mybestmovie.data.movie.local.MovieLocalRepositoryImpl
+import pl.simcodic.mybestmovie.data.movie.remote.MovieRepositoryImpl
+import pl.simcodic.mybestmovie.data.movie.remote.MovieService
+import pl.simcodic.mybestmovie.domain.movie.local.repository.MovieLocalRepository
+import pl.simcodic.mybestmovie.domain.movie.remote.repository.MovieRepository
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -41,9 +47,27 @@ class WebModules {
 }
 
 @Module
+@InstallIn(SingletonComponent::class)
+class Database {
+
+    @Provides
+    fun database(@ApplicationContext appContext: Context) = Room.databaseBuilder(
+        appContext,
+        MovieDatabase::class.java, "movie_database"
+    ).build()
+
+    @Provides
+    fun movieDao(movieDatabase: MovieDatabase) = movieDatabase.movieDao()
+}
+
+@Module
 @InstallIn(ViewModelComponent::class)
 abstract class RepositoryModules {
 
     @Binds
     abstract fun bindMovieRepository(movieRepositoryImpl: MovieRepositoryImpl): MovieRepository
+
+    @Binds
+    abstract fun bindMovieLocalRepository(movieRepositoryImpl: MovieLocalRepositoryImpl): MovieLocalRepository
 }
+

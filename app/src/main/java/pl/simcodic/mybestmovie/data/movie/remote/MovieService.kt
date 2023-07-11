@@ -1,6 +1,6 @@
-package pl.simcodic.mybestmovie.data.movie
+package pl.simcodic.mybestmovie.data.movie.remote
 
-import pl.simcodic.mybestmovie.data.movie.data.NowPlayingMoviesResponseBody
+import pl.simcodic.mybestmovie.data.movie.remote.data.NowPlayingMoviesResponseBody
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.QueryMap

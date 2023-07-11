@@ -1,6 +1,6 @@
 package pl.simcodic.mybestmovie.presentation.main.viewdata
 
-import pl.simcodic.mybestmovie.domain.movie.data.Movie
+import pl.simcodic.mybestmovie.domain.movie.remote.data.Movie
 import pl.simcodic.mybestmovie.presentation.main.navigationdata.DetailsNavigationData
 
 data class MovieViewData(

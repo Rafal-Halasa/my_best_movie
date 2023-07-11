@@ -58,6 +58,7 @@ fun MainScreen(onDetailsGo: (MovieViewData) -> Unit, viewModel: MainViewModel) {
         viewModel::onFindMovie,
         viewModel::onFindMovieClear,
         viewModel::onGetNowPlayingMoviesWithPagination,
+        viewModel::onAddMovieToFavorite,
         onDetailsGo,
     )
 }
@@ -72,6 +73,7 @@ fun MainScreenContainer(
     onFindMovie: (String) -> Unit,
     onFindMovieClear: () -> Unit,
     onGetNowPlayingMoviesWithPagination: (Int) -> Unit,
+    onAddMovieToFavorite: (Int) -> Unit,
     onDetailsGo: (MovieViewData) -> Unit,
 ) {
     var textField by rememberSaveable {
@@ -97,6 +99,7 @@ fun MainScreenContainer(
                 Box {
                     MoviesList(
                         onGetNowPlayingMovies = onGetNowPlayingMoviesWithPagination,
+                        onAddMovieToFavorite = onAddMovieToFavorite,
                         moviesData = movies,
                         onDetailsGo = onDetailsGo
                     )
@@ -171,6 +174,7 @@ fun SearchView(value: String, onFindMovieClear: () -> Unit, onValueChange: (Stri
 fun MoviesList(
     onGetNowPlayingMovies: (Int) -> Unit,
     onDetailsGo: (MovieViewData) -> Unit,
+    onAddMovieToFavorite: (Int) -> Unit,
     moviesData: MoviesViewData,
     modifier: Modifier = Modifier
 ) {
@@ -197,10 +201,12 @@ fun MoviesList(
                             .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)),
                         contentAlignment = Alignment.TopEnd
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.baseline_star_border),
-                            contentDescription = null
-                        )
+                        IconButton(onClick = { onAddMovieToFavorite(1) }) {
+                            Image(
+                                painter = painterResource(id = R.drawable.baseline_star_border),
+                                contentDescription = null
+                            )
+                        }
                     }
                 }
             }
@@ -263,7 +269,7 @@ fun GreetingPreview() {
             MoviesViewData(
                 1,
                 listOf(), 2
-            ), false, {}, {}, {}, {}, {}
+            ), false, {}, {}, {}, {}, {}, {}
         )
     }
 }
@@ -280,7 +286,7 @@ fun GreetingPreviewError() {
             MoviesViewData(
                 1,
                 listOf(), 2
-            ), true, {}, {}, {}, {}, {}
+            ), true, {}, {}, {}, {}, {}, {}
         )
     }
 }

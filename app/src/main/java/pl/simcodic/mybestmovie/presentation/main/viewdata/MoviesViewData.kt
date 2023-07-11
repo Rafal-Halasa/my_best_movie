@@ -1,6 +1,6 @@
 package pl.simcodic.mybestmovie.presentation.main.viewdata
 
-import pl.simcodic.mybestmovie.domain.movie.data.NowPlayingMovies
+import pl.simcodic.mybestmovie.domain.movie.remote.data.NowPlayingMovies
 
 data class MoviesViewData(
     val page: Int,

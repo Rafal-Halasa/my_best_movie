@@ -6,10 +6,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import pl.simcodic.mybestmovie.domain.movie.FindMoviesUseCase
-import pl.simcodic.mybestmovie.domain.movie.FindMoviesUseCase.FindMoviesUseCaseInput
-import pl.simcodic.mybestmovie.domain.movie.GetNowPlayingMoviesUseCase
-import pl.simcodic.mybestmovie.domain.movie.GetNowPlayingMoviesUseCase.NowPlayingMoviesInput
+import pl.simcodic.mybestmovie.domain.movie.local.SaveLocalMovieUseCase
+import pl.simcodic.mybestmovie.domain.movie.local.data.MovieLocal
+import pl.simcodic.mybestmovie.domain.movie.remote.FindMoviesUseCase
+import pl.simcodic.mybestmovie.domain.movie.remote.FindMoviesUseCase.FindMoviesUseCaseInput
+import pl.simcodic.mybestmovie.domain.movie.remote.GetNowPlayingMoviesUseCase
+import pl.simcodic.mybestmovie.domain.movie.remote.GetNowPlayingMoviesUseCase.NowPlayingMoviesInput
 import pl.simcodic.mybestmovie.presentation.main.viewdata.MoviesViewData
 import pl.simcodic.mybestmovie.presentation.main.viewdata.mapToMoviesViewData
 import pl.simcodic.mybestmovie.presentation.main.viewdata.plus
@@ -18,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val getNowPlayingMoviesUseCase: GetNowPlayingMoviesUseCase,
-    private val findMoviesUseCase: FindMoviesUseCase
+    private val findMoviesUseCase: FindMoviesUseCase,
+    private val saveLocalMovieUseCase: SaveLocalMovieUseCase,
 ) : ViewModel() {
     private var _isError = MutableStateFlow(false)
     val isError = _isError.asStateFlow()
@@ -61,7 +64,9 @@ class MainViewModel @Inject constructor(
     }
 
     fun onAddMovieToFavorite(id: Int) {
-
+        viewModelScope.launch {
+            saveLocalMovieUseCase(SaveLocalMovieUseCase.SaveLocalInput(MovieLocal(id, true)))
+        }
     }
 
     private fun onGetNowPlayingMovies(

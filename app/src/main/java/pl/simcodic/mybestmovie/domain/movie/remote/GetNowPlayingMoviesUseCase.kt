@@ -1,13 +1,13 @@
-package pl.simcodic.mybestmovie.domain.movie
+package pl.simcodic.mybestmovie.domain.movie.remote
 
 import pl.simcodic.mybestmovie.domain.base.Input
 import pl.simcodic.mybestmovie.domain.base.Output
 import pl.simcodic.mybestmovie.domain.base.UseCase
-import pl.simcodic.mybestmovie.domain.movie.GetNowPlayingMoviesUseCase.NowPlayingMoviesInput
-import pl.simcodic.mybestmovie.domain.movie.GetNowPlayingMoviesUseCase.NowPlayingMoviesOutput
-import pl.simcodic.mybestmovie.domain.movie.data.NowPlayingMovies
-import pl.simcodic.mybestmovie.domain.movie.data.mapToNowPlayingMovies
-import pl.simcodic.mybestmovie.domain.movie.repository.MovieRepository
+import pl.simcodic.mybestmovie.domain.movie.remote.GetNowPlayingMoviesUseCase.NowPlayingMoviesInput
+import pl.simcodic.mybestmovie.domain.movie.remote.GetNowPlayingMoviesUseCase.NowPlayingMoviesOutput
+import pl.simcodic.mybestmovie.domain.movie.remote.data.NowPlayingMovies
+import pl.simcodic.mybestmovie.domain.movie.remote.data.mapToNowPlayingMovies
+import pl.simcodic.mybestmovie.domain.movie.remote.repository.MovieRepository
 import javax.inject.Inject
 
 class GetNowPlayingMoviesUseCase @Inject constructor(private val movieRepository: MovieRepository) :

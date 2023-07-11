@@ -1,7 +1,7 @@
-package pl.simcodic.mybestmovie.data.movie
+package pl.simcodic.mybestmovie.data.movie.remote
 
-import pl.simcodic.mybestmovie.data.movie.data.NowPlayingMoviesResponseBody
-import pl.simcodic.mybestmovie.domain.movie.repository.MovieRepository
+import pl.simcodic.mybestmovie.data.movie.remote.data.NowPlayingMoviesResponseBody
+import pl.simcodic.mybestmovie.domain.movie.remote.repository.MovieRepository
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(private val service: MovieService) : MovieRepository {
