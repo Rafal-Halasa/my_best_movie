@@ -27,6 +27,7 @@ fun Movie.toMovieViewData() = with(this) {
 
 fun MovieViewData.mapToNavigationData() = with(this) {
     DetailsNavigationData(
+        id = id,
         title = title,
         posterPath = posterPath,
         releaseDate = releaseDate,

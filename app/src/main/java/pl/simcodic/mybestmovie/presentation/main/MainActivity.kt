@@ -10,6 +10,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import pl.simcodic.mybestmovie.presentation.details.DetailsScreen
+import pl.simcodic.mybestmovie.presentation.details.DetailsViewModel
+import pl.simcodic.mybestmovie.presentation.main.ArgumentsNames.ID
 import pl.simcodic.mybestmovie.presentation.main.ArgumentsNames.OVERVIEW
 import pl.simcodic.mybestmovie.presentation.main.ArgumentsNames.POSTER_PATH
 import pl.simcodic.mybestmovie.presentation.main.ArgumentsNames.RELEASE_DATE
@@ -23,7 +25,8 @@ import pl.simcodic.mybestmovie.presentation.theme.AppTheme
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
+    private val detailsViewModel: DetailsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +44,7 @@ class MainActivity : ComponentActivity() {
                                     it.mapToNavigationData().toArgString()
                                 }"
                             )
-                        }, viewModel)
+                        }, mainViewModel)
                     }
                     composable(NavigationDirections.DETAILS.destination,
                         arguments = listOf(
@@ -53,7 +56,7 @@ class MainActivity : ComponentActivity() {
                         )) {
                         DetailsScreen(onBack = {
                             navController.popBackStack(NavigationDirections.HOME.destination, false)
-                        }, it.arguments)
+                        }, it.arguments, detailsViewModel)
                     }
                 }
             }
@@ -63,10 +66,11 @@ class MainActivity : ComponentActivity() {
 
 enum class NavigationDirections(val destination: String) {
     HOME("home"),
-    DETAILS("details_screen/?$TITLE={$TITLE}&$POSTER_PATH={$POSTER_PATH}&$RELEASE_DATE={$RELEASE_DATE}&$VOTE_AVERAGE={$VOTE_AVERAGE}&$VOTE_COUNT={$VOTE_COUNT}&$OVERVIEW={$OVERVIEW}")
+    DETAILS("details_screen/?$ID={$ID}&$TITLE={$TITLE}&$POSTER_PATH={$POSTER_PATH}&$RELEASE_DATE={$RELEASE_DATE}&$VOTE_AVERAGE={$VOTE_AVERAGE}&$VOTE_COUNT={$VOTE_COUNT}&$OVERVIEW={$OVERVIEW}")
 }
 
 object ArgumentsNames {
+    const val ID = "id"
     const val TITLE = "title"
     const val POSTER_PATH = "posterPath"
     const val RELEASE_DATE = "releaseDate"
