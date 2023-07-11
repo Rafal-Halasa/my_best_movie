@@ -13,7 +13,7 @@ import javax.inject.Inject
 class FindMoviesUseCase @Inject constructor(private val movieRepository: MovieRepository) :
     UseCase<FindMoviesUseCaseInput, FindMoviesUseCaseOutput> {
 
-    override fun run(input: FindMoviesUseCaseInput): FindMoviesUseCaseOutput =
+    override suspend fun run(input: FindMoviesUseCaseInput): FindMoviesUseCaseOutput =
         FindMoviesUseCaseOutput(movieRepository.findMovies(input.text).mapToNowPlayingMovies())
 
 

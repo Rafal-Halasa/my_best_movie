@@ -5,7 +5,7 @@ import kotlinx.coroutines.withContext
 
 interface UseCase<in IN : Input, out OUT : Output> {
 
-    fun run(input: IN): OUT
+    suspend fun run(input: IN): OUT
 
     suspend operator fun invoke(input: IN) = withContext(Dispatchers.IO) {
         run(input)

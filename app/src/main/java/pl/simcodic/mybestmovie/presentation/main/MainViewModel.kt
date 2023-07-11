@@ -43,14 +43,10 @@ class MainViewModel @Inject constructor(
     init {
         onGetNowPlayingMovies(1)
         viewModelScope.launch {
-            runCatching {
-                println("tutaj tak")
-                getLocalMoviesUseCase(NonInput)
-            }.onSuccess { output ->
-                println("tutaj " +output.localMovie)
-                _localMovies.value = output.localMovie.map { it.mapToLocalMovieViewData() }
-            }.onFailure {
-                println("tutaj cos poszlo nie tal $it")
+            getLocalMoviesUseCase(NonInput).collect() { getMoviesLocalOutput ->
+                _localMovies.value = getMoviesLocalOutput.localMovie.map {
+                    it.mapToLocalMovieViewData()
+                }
             }
         }
     }

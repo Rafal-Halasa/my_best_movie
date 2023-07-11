@@ -13,7 +13,7 @@ import javax.inject.Inject
 class GetNowPlayingMoviesUseCase @Inject constructor(private val movieRepository: MovieRepository) :
     UseCase<NowPlayingMoviesInput, NowPlayingMoviesOutput> {
 
-    override fun run(input: NowPlayingMoviesInput): NowPlayingMoviesOutput =
+    override suspend fun run(input: NowPlayingMoviesInput): NowPlayingMoviesOutput =
         NowPlayingMoviesOutput(
             movieRepository.getNowPlayingMovies(input.page).mapToNowPlayingMovies()
         )

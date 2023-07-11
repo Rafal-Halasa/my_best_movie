@@ -11,7 +11,7 @@ import javax.inject.Inject
 class SaveLocalMovieUseCase @Inject constructor(private val movieLocalRepository: MovieLocalRepository) :
     UseCase<SaveLocalMovieUseCase.SaveLocalInput, NonOutput> {
 
-    override fun run(input: SaveLocalInput): NonOutput {
+    override suspend fun run(input: SaveLocalInput): NonOutput {
         movieLocalRepository.insertMovie(input.localMovie.toMovieEntity())
         return NonOutput
     }

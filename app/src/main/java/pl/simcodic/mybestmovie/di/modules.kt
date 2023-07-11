@@ -19,6 +19,7 @@ import pl.simcodic.mybestmovie.domain.movie.local.repository.MovieLocalRepositor
 import pl.simcodic.mybestmovie.domain.movie.remote.repository.MovieRepository
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
 const val API_URL = "https://api.themoviedb.org/3/"
 
@@ -51,12 +52,14 @@ class WebModules {
 class Database {
 
     @Provides
+    @Singleton
     fun database(@ApplicationContext appContext: Context) = Room.databaseBuilder(
         appContext,
         MovieDatabase::class.java, "movie_database"
     ).build()
 
     @Provides
+    @Singleton
     fun movieDao(movieDatabase: MovieDatabase) = movieDatabase.movieDao()
 }
 
