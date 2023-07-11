@@ -60,8 +60,15 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun onAddMovieToFavorite(id: Int) {
+
+    }
+
     private fun onGetNowPlayingMovies(
         page: Int,
+        onFailureAction: (exception: Throwable) -> Unit = {
+            _isError.value = true
+        },
         onSuccessAction: (value: GetNowPlayingMoviesUseCase.NowPlayingMoviesOutput) -> Unit = {
             _movies.value = it.nowPlayingMovies.mapToNowPlayingMoviesViewData()
         },
@@ -69,9 +76,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 getNowPlayingMoviesUseCase(NowPlayingMoviesInput(page))
-            }.onSuccess(onSuccessAction).onFailure {
-                _isError.value = true
-            }
+            }.onSuccess(onSuccessAction).onFailure(onFailureAction)
         }
     }
 }
