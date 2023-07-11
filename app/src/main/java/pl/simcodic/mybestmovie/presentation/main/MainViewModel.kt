@@ -10,8 +10,8 @@ import pl.simcodic.mybestmovie.domain.movie.FindMoviesUseCase
 import pl.simcodic.mybestmovie.domain.movie.FindMoviesUseCase.FindMoviesUseCaseInput
 import pl.simcodic.mybestmovie.domain.movie.GetNowPlayingMoviesUseCase
 import pl.simcodic.mybestmovie.domain.movie.GetNowPlayingMoviesUseCase.NowPlayingMoviesInput
-import pl.simcodic.mybestmovie.presentation.main.viewdata.NowPlayingMoviesViewData
-import pl.simcodic.mybestmovie.presentation.main.viewdata.mapToNowPlayingMoviesViewData
+import pl.simcodic.mybestmovie.presentation.main.viewdata.MoviesViewData
+import pl.simcodic.mybestmovie.presentation.main.viewdata.mapToMoviesViewData
 import pl.simcodic.mybestmovie.presentation.main.viewdata.plus
 import javax.inject.Inject
 
@@ -23,10 +23,10 @@ class MainViewModel @Inject constructor(
     private var _isError = MutableStateFlow(false)
     val isError = _isError.asStateFlow()
 
-    private var _movies = MutableStateFlow<NowPlayingMoviesViewData?>(null)
+    private var _movies = MutableStateFlow<MoviesViewData?>(null)
     val movies = _movies.asStateFlow()
 
-    private var _findMovies = MutableStateFlow<NowPlayingMoviesViewData?>(null)
+    private var _findMovies = MutableStateFlow<MoviesViewData?>(null)
     val findMovies = _findMovies.asStateFlow()
 
     init {
@@ -42,7 +42,7 @@ class MainViewModel @Inject constructor(
             runCatching {
                 findMoviesUseCase(FindMoviesUseCaseInput(text))
             }.onSuccess { value ->
-                _findMovies.value = value.nowPlayingMovies.mapToNowPlayingMoviesViewData()
+                _findMovies.value = value.nowPlayingMovies.mapToMoviesViewData()
             }
         }
     }
@@ -55,7 +55,7 @@ class MainViewModel @Inject constructor(
         onGetNowPlayingMovies(page = page) { newPlayingMovies ->
             _movies.value?.let {
                 _movies.value =
-                    it + newPlayingMovies.nowPlayingMovies.mapToNowPlayingMoviesViewData()
+                    it + newPlayingMovies.nowPlayingMovies.mapToMoviesViewData()
             }
         }
     }
@@ -70,7 +70,7 @@ class MainViewModel @Inject constructor(
             _isError.value = true
         },
         onSuccessAction: (value: GetNowPlayingMoviesUseCase.NowPlayingMoviesOutput) -> Unit = {
-            _movies.value = it.nowPlayingMovies.mapToNowPlayingMoviesViewData()
+            _movies.value = it.nowPlayingMovies.mapToMoviesViewData()
         },
     ) {
         viewModelScope.launch {

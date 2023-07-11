@@ -3,7 +3,7 @@ package pl.simcodic.mybestmovie.presentation.main.viewdata
 import pl.simcodic.mybestmovie.domain.movie.data.Movie
 import pl.simcodic.mybestmovie.presentation.main.navigationdata.DetailsNavigationData
 
-data class NowPlayingMovieViewData(
+data class MovieViewData(
     val title: String,
     val posterPath: String?,
     val releaseDate: String,
@@ -12,8 +12,8 @@ data class NowPlayingMovieViewData(
     val voteCount: Int
 )
 
-fun Movie.toNowPlayingMovieViewData() = with(this) {
-    NowPlayingMovieViewData(
+fun Movie.toMovieViewData() = with(this) {
+    MovieViewData(
         title = title,
         posterPath = posterPath,
         releaseDate = releaseDate,
@@ -23,7 +23,7 @@ fun Movie.toNowPlayingMovieViewData() = with(this) {
     )
 }
 
-fun NowPlayingMovieViewData.mapToNavigationData() = with(this) {
+fun MovieViewData.mapToNavigationData() = with(this) {
     DetailsNavigationData(
         title = title,
         posterPath = posterPath,

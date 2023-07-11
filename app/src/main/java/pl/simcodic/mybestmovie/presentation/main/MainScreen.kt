@@ -43,13 +43,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import pl.simcodic.mybestmovie.R
-import pl.simcodic.mybestmovie.presentation.main.viewdata.NowPlayingMovieViewData
-import pl.simcodic.mybestmovie.presentation.main.viewdata.NowPlayingMoviesViewData
+import pl.simcodic.mybestmovie.presentation.main.viewdata.MovieViewData
+import pl.simcodic.mybestmovie.presentation.main.viewdata.MoviesViewData
 import pl.simcodic.mybestmovie.presentation.theme.AppTheme
 
 
 @Composable
-fun MainScreen(onDetailsGo: (NowPlayingMovieViewData) -> Unit, viewModel: MainViewModel) {
+fun MainScreen(onDetailsGo: (MovieViewData) -> Unit, viewModel: MainViewModel) {
     MainScreenContainer(
         viewModel.movies.collectAsState().value,
         viewModel.findMovies.collectAsState().value,
@@ -65,14 +65,14 @@ fun MainScreen(onDetailsGo: (NowPlayingMovieViewData) -> Unit, viewModel: MainVi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreenContainer(
-    movies: NowPlayingMoviesViewData?,
-    findMovies: NowPlayingMoviesViewData?,
+    movies: MoviesViewData?,
+    findMovies: MoviesViewData?,
     isError: Boolean,
     disableError: () -> Unit,
     onFindMovie: (String) -> Unit,
     onFindMovieClear: () -> Unit,
     onGetNowPlayingMoviesWithPagination: (Int) -> Unit,
-    onDetailsGo: (NowPlayingMovieViewData) -> Unit,
+    onDetailsGo: (MovieViewData) -> Unit,
 ) {
     var textField by rememberSaveable {
         mutableStateOf("")
@@ -116,7 +116,7 @@ fun MainScreenContainer(
 }
 
 @Composable
-fun AutoFillView(movies: List<NowPlayingMovieViewData>) {
+fun AutoFillView(movies: List<MovieViewData>) {
     if (movies.isNotEmpty()) {
         Card(
             elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
@@ -170,8 +170,8 @@ fun SearchView(value: String, onFindMovieClear: () -> Unit, onValueChange: (Stri
 @Composable
 fun MoviesList(
     onGetNowPlayingMovies: (Int) -> Unit,
-    onDetailsGo: (NowPlayingMovieViewData) -> Unit,
-    moviesData: NowPlayingMoviesViewData,
+    onDetailsGo: (MovieViewData) -> Unit,
+    moviesData: MoviesViewData,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
@@ -256,11 +256,11 @@ fun ErrorView(disableError: () -> Unit, modifier: Modifier = Modifier) {
 fun GreetingPreview() {
     AppTheme {
         MainScreenContainer(
-            NowPlayingMoviesViewData(
+            MoviesViewData(
                 1,
                 listOf(), 2
             ),
-            NowPlayingMoviesViewData(
+            MoviesViewData(
                 1,
                 listOf(), 2
             ), false, {}, {}, {}, {}, {}
@@ -273,11 +273,11 @@ fun GreetingPreview() {
 fun GreetingPreviewError() {
     AppTheme {
         MainScreenContainer(
-            NowPlayingMoviesViewData(
+            MoviesViewData(
                 1,
                 listOf(), 2
             ),
-            NowPlayingMoviesViewData(
+            MoviesViewData(
                 1,
                 listOf(), 2
             ), true, {}, {}, {}, {}, {}
