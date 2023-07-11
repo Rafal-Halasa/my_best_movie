@@ -10,8 +10,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import pl.simcodic.mybestmovie.presentation.details.DetailsScreen
+import pl.simcodic.mybestmovie.presentation.main.ArgumentsNames.OVERVIEW
 import pl.simcodic.mybestmovie.presentation.main.ArgumentsNames.POSTER_PATH
-import pl.simcodic.mybestmovie.presentation.main.ArgumentsNames.RELEASE_DATA
+import pl.simcodic.mybestmovie.presentation.main.ArgumentsNames.RELEASE_DATE
 import pl.simcodic.mybestmovie.presentation.main.ArgumentsNames.TITLE
 import pl.simcodic.mybestmovie.presentation.main.ArgumentsNames.VOTE_AVERAGE
 import pl.simcodic.mybestmovie.presentation.main.ArgumentsNames.VOTE_COUNT
@@ -46,7 +47,7 @@ class MainActivity : ComponentActivity() {
                         arguments = listOf(
                             navArgument(TITLE) { defaultValue = "" },
                             navArgument(POSTER_PATH) { defaultValue = "" },
-                            navArgument(RELEASE_DATA) { defaultValue = "" },
+                            navArgument(RELEASE_DATE) { defaultValue = "" },
                             navArgument(VOTE_AVERAGE) { defaultValue = "" },
                             navArgument(VOTE_COUNT) { defaultValue = "" }
                         )) {
@@ -62,13 +63,14 @@ class MainActivity : ComponentActivity() {
 
 enum class NavigationDirections(val destination: String) {
     HOME("home"),
-    DETAILS("details_screen/?$TITLE={$TITLE}&$POSTER_PATH={$POSTER_PATH}&$RELEASE_DATA={$RELEASE_DATA}&$VOTE_AVERAGE={$VOTE_AVERAGE}&$VOTE_COUNT={$VOTE_COUNT}")
+    DETAILS("details_screen/?$TITLE={$TITLE}&$POSTER_PATH={$POSTER_PATH}&$RELEASE_DATE={$RELEASE_DATE}&$VOTE_AVERAGE={$VOTE_AVERAGE}&$VOTE_COUNT={$VOTE_COUNT}&$OVERVIEW={$OVERVIEW}")
 }
 
 object ArgumentsNames {
     const val TITLE = "title"
     const val POSTER_PATH = "posterPath"
-    const val RELEASE_DATA = "releaseDate"
+    const val RELEASE_DATE = "releaseDate"
     const val VOTE_AVERAGE = "voteAverage"
+    const val OVERVIEW = "overview"
     const val VOTE_COUNT = "voteCount"
 }

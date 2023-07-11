@@ -8,6 +8,7 @@ data class NowPlayingMovieViewData(
     val posterPath: String?,
     val releaseDate: String,
     val voteAverage: Double,
+    val overview: String,
     val voteCount: Int
 )
 
@@ -17,6 +18,7 @@ fun Movie.toNowPlayingMovieViewData() = with(this) {
         posterPath = posterPath,
         releaseDate = releaseDate,
         voteAverage = voteAverage,
+        overview = overview,
         voteCount = voteCount
     )
 }
@@ -27,6 +29,7 @@ fun NowPlayingMovieViewData.mapToNavigationData() = with(this) {
         posterPath = posterPath,
         releaseDate = releaseDate,
         voteAverage = voteAverage,
+        overview = overview,
         voteCount = voteCount
     )
 }
