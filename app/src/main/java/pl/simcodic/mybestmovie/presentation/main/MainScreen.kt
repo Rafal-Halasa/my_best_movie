@@ -158,7 +158,7 @@ fun SearchView(value: String, onFindMovieClear: () -> Unit, onValueChange: (Stri
     TextField(
         value = value,
         onValueChange = onValueChange,
-        placeholder = { Text(text = "Find movie") },
+        placeholder = { Text(text = stringResource(R.string.find_movie)) },
         modifier = Modifier.fillMaxWidth(),
         singleLine = true,
         leadingIcon = {
@@ -247,7 +247,7 @@ fun MoviesList(
                         onClick = { onGetNowPlayingMovies(moviesData.page + 1) },
                         modifier = Modifier.fillMaxWidth(0.7f)
                     ) {
-                        Text(text = "More")
+                        Text(text = stringResource(R.string.more))
                     }
                 }
             }
@@ -272,7 +272,7 @@ fun ErrorView(disableError: () -> Unit, modifier: Modifier = Modifier) {
                 painter = painterResource(id = R.drawable.baseline_error),
                 contentDescription = null
             )
-            Text(text = "Sorry but something go wrong")
+            Text(text = stringResource(R.string.something_go_wrong))
             Spacer(modifier = Modifier.height(20.dp))
             OutlinedButton(onClick = disableError, modifier = Modifier.fillMaxWidth(0.7f)) {
                 Text(text = stringResource(R.string.ok))

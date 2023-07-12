@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">My Best Movie</string>
     <string name="ok">OK</string>
+    <string name="something_go_wrong">Sorry but something go wrong</string>
+    <string name="more">More</string>
+    <string name="find_movie">Find movie</string>
 </resources>
