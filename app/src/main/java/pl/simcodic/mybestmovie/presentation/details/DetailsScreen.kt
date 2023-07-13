@@ -23,6 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -124,13 +125,13 @@ fun DetailsScreenContainer(
             ) {
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = "Release Date: $releaseDate",
+                    text = stringResource(id = R.string.release_date, releaseDate),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.background
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = "Vote: $voteAverage Number of Vote: $voteCount",
+                    text = stringResource(id = R.string.vote_and_number, voteAverage, voteCount),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.background
                 )
